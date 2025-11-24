@@ -82,6 +82,10 @@ map.on("click", async function (e) {
   let resMeteo = await fetch(urlMeteo);
   let datiMeteo = await resMeteo.json();
   let temperatura = datiMeteo.current_weather?.temperature ?? null;
+  if (temperatura !== null) {
+    temperatureSalvate.push(temperatura);
+    aggiornaStatistiche();
+  }
   L.circle([lat, lon], {
     color: "transparent",
     fillColor: getColoreTemperatura(temperatura),
