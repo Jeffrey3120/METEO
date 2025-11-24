@@ -24,18 +24,21 @@ function aggiornaStatistiche() {
     document.getElementById("temp-min").textContent = "Min: N/D";
     return;
   }
-  // Aggiorna i contatori in modo semplice
-  var somma = 0;
-  for (var i = 0; i < temperatureSalvate.length; i++) {
+  let somma = 0;
+  for (let i = 0; i < temperatureSalvate.length; i++) {
     somma = somma + temperatureSalvate[i];
   }
-  var media = (somma / tot).toFixed(1);
-  var max = Math.max.apply(null, temperatureSalvate).toFixed(1);
-  var min = Math.min.apply(null, temperatureSalvate).toFixed(1);
+  let media = (somma / tot).toFixed(1);
+  let max = temperatureSalvate[0];
+  let min = temperatureSalvate[0];
+  for (let i = 1; i < temperatureSalvate.length; i++) {
+    if (temperatureSalvate[i] > max) max = temperatureSalvate[i];
+    if (temperatureSalvate[i] < min) min = temperatureSalvate[i];
+  }
   document.getElementById("marker-count").textContent = "Marker: " + tot;
   document.getElementById("temp-media").textContent = "Temperatura media: " + media;
-  document.getElementById("temp-max").textContent = "Max: " + max;
-  document.getElementById("temp-min").textContent = "Min: " + min;
+  document.getElementById("temp-max").textContent = "Max: " + max.toFixed(1);
+  document.getElementById("temp-min").textContent = "Min: " + min.toFixed(1);
 }
 
 async function caricaDati() {
@@ -64,7 +67,7 @@ async function caricaDati() {
     })
       .addTo(map)
       .bindPopup(
-        `Lat: ${lat}<br>Lon: ${lon}<br>Luogo: ${nomeLuogo}<br>Temperatura: ${temperatura}°C`
+        "Lat: " + lat + "<br>Lon: " + lon + "<br>Luogo: " + nomeLuogo + "<br>Temperatura: " + temperatura + "°C"
       );
   }
 }
@@ -72,21 +75,14 @@ async function caricaDati() {
 map.on("click", async function (e) {
   let lat = e.latlng.lat;
   let lon = e.latlng.lng;
-  let urlNome = `${NOMINATIM_BASE_URL}&lat=${lat}&lon=${lon}`;
+  let urlNome = NOMINATIM_BASE_URL + "&lat=" + lat + "&lon=" + lon;
   let res = await fetch(urlNome);
   let info = await res.json();
-  let nome = info.address?.city ||
-    info.address?.town ||
-    info.address?.village ||
-    info.address?.hamlet ||
-    info.address?.municipality ||
-    info.address?.country ||
-    "Nome non trovato";
-  let urlMeteo =
-    `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m&current_weather=true`;
+  let nome = info.address && (info.address.city || info.address.town || info.address.village || info.address.hamlet || info.address.municipality || info.address.country) || "Nome non trovato";
+  let urlMeteo = "https://api.open-meteo.com/v1/forecast?latitude=" + lat + "&longitude=" + lon + "&hourly=temperature_2m&current_weather=true";
   let resMeteo = await fetch(urlMeteo);
   let datiMeteo = await resMeteo.json();
-  let temperatura = datiMeteo.current_weather?.temperature ?? null;
+  let temperatura = datiMeteo.current_weather && datiMeteo.current_weather.temperature !== undefined ? datiMeteo.current_weather.temperature : null;
   if (temperatura !== null) {
     temperatureSalvate.push(temperatura);
     aggiornaStatistiche();
@@ -99,7 +95,7 @@ map.on("click", async function (e) {
   })
     .addTo(map)
     .bindPopup(
-      `Lat: ${lat}<br>Lon: ${lon}<br>Luogo: ${nome}<br>Temperatura: ${temperatura}°C`
+      "Lat: " + lat + "<br>Lon: " + lon + "<br>Luogo: " + nome + "<br>Temperatura: " + temperatura + "°C"
     )
     .openPopup();
   try {
@@ -108,7 +104,7 @@ map.on("click", async function (e) {
       citta: nome,
     });
     document.getElementById("save-status").textContent =
-      `Salvato: ${record.citta} (${lat}, ${lon})`;
+      "Salvato: " + record.citta + " (" + lat + ", " + lon + ")";
   } catch (error) {
     document.getElementById("save-status").textContent =
       "Errore nel salvataggio: " + error.message;
