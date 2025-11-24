@@ -24,9 +24,14 @@ function aggiornaStatistiche() {
     document.getElementById("temp-min").textContent = "Min: N/D";
     return;
   }
-  let media = (temperatureSalvate.reduce((a, b) => a + b) / tot).toFixed(1);
-  let max = Math.max(...temperatureSalvate).toFixed(1);
-  let min = Math.min(...temperatureSalvate).toFixed(1);
+  // Aggiorna i contatori in modo semplice
+  var somma = 0;
+  for (var i = 0; i < temperatureSalvate.length; i++) {
+    somma = somma + temperatureSalvate[i];
+  }
+  var media = (somma / tot).toFixed(1);
+  var max = Math.max.apply(null, temperatureSalvate).toFixed(1);
+  var min = Math.min.apply(null, temperatureSalvate).toFixed(1);
   document.getElementById("marker-count").textContent = "Marker: " + tot;
   document.getElementById("temp-media").textContent = "Temperatura media: " + media;
   document.getElementById("temp-max").textContent = "Max: " + max;
@@ -71,12 +76,12 @@ map.on("click", async function (e) {
   let res = await fetch(urlNome);
   let info = await res.json();
   let nome = info.address?.city ||
-             info.address?.town ||
-             info.address?.village ||
-             info.address?.hamlet ||
-             info.address?.municipality ||
-             info.address?.country ||
-             "Nome non trovato";
+    info.address?.town ||
+    info.address?.village ||
+    info.address?.hamlet ||
+    info.address?.municipality ||
+    info.address?.country ||
+    "Nome non trovato";
   let urlMeteo =
     `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m&current_weather=true`;
   let resMeteo = await fetch(urlMeteo);
