@@ -1,9 +1,9 @@
-### 📌 Analisi dei Requisiti – Progetto METEO
+### Analisi dei Requisiti – Progetto METEO
 
 Questo documento descrive l’analisi dei requisiti del progetto METEO, un’applicazione web che consente di visualizzare, salvare e analizzare dati geografici e meteorologici tramite una mappa interattiva.
 Il progetto utilizza Leaflet, PocketBase, Open-Meteo e Nominatim/OpenStreetMap.
 
-### 🔗 Fonti e Servizi Utilizzati
+### Fonti e Servizi Utilizzati
 
 Leaflet – Libreria per la mappa interattiva
 
@@ -13,7 +13,7 @@ Open-Meteo – Servizio open per dati meteorologici in tempo reale
 
 Nominatim / OpenStreetMap – Reverse geocoding e informazioni sui luoghi
 
-📍 Dati geografici © OpenStreetMap contributors
+Dati geografici © OpenStreetMap contributors
 
 
 ## Requisiti Funzionali
