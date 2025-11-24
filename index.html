@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <title>METEO</title>
+</head>
+
+<body>
+  <div id="map"></div>
+
+  <div id="legend">
+    <strong>Legenda temperature</strong><br>
+    <span class="legend-dot freddo"></span> <= 0° freddo<br>
+    <span class="legend-dot mite"></span> 1-10° mite<br>
+    <span class="legend-dot caldo"></span> 11-20° caldo<br>
+    <span class="legend-dot molto-caldo"></span> > 20° molto caldo
+  </div>
+
+  <div id="stats">
+    <span id="marker-count">Marker: 0</span> |
+    <span id="temp-media">Temperatura media: N/D</span> |
+    <span id="temp-max">Max: N/D</span> |
+    <span id="temp-min">Min: N/D</span>
+  </div>
+
+  <div id="save-status"></div>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
